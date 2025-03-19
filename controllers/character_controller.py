@@ -7,6 +7,16 @@ load_dotenv()
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
+def generate_image(backstory):
+  response = openai.images.generate(
+    model="dall-e-3",
+    prompt=f"Make an image of the character told about in this story, the setting is dark-fantasy: {backstory}. The image should only be of the character holding some type of weapon. Make it in the style of a 90s videogame. There should be no text in the image",
+    size="1024x1024",
+    quality="standard",
+    n=1
+  )
+  return response.data[0].url
+
 def generate_backstory(name, class_type):
   prompt = f"""
     Create a dark fantasy backstory for a character named {name},
@@ -45,7 +55,7 @@ def create_character(data):
   
   stats = stats[class_type]
   backstory = generate_backstory(data['name'], class_type)
-  image_url = 'IMAGE_URL'
+  image_url = generate_image(backstory)
 
   new_char = Character(
     name=data['name'],
