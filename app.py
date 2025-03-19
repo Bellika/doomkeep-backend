@@ -1,5 +1,6 @@
 from flask import Flask 
 from config.db import db, get_database_uri
+from routes.character_routes import character_routes
 
 app = Flask(__name__)
 
@@ -7,6 +8,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+app.register_blueprint(character_routes)
 
 @app.route('/ping')
 def ping():
